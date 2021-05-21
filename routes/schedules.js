@@ -15,9 +15,9 @@ router.post('/', authenticationEnsurer, (req, res, newt) => {
   const updatedAt = new Date();
   Schedule.create({
     scheduleId: scheduleId,
-    scheduleName: req.body.scheduleName.slice(0, 255) || '(名称未設定)',
+    scheduleName: req.body.scheduleName.slice(0, 255) || '（名称未設定）',
     memo: req.body.memo,
-    createBy: req.user.id,
+    createdBy: req.user.id,
     updatedAt: updatedAt
   }).then((schedule) => {
     const candidateNames = req.body.candidates.trim().split('\n').map((s) => s.trim()).filter((s) => s !== "");
@@ -25,7 +25,7 @@ router.post('/', authenticationEnsurer, (req, res, newt) => {
       candidateName: c,
       scheduleId: schedule.scheduleId
     };});
-    Candidate.bulkCreate(candidates).then(() =>  {
+    Candidate.bulkCreate(candidates).then(() => {
       res.redirect('/schedules/' + schedule.scheduleId);
     });
   });
